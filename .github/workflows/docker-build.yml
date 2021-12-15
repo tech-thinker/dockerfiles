@@ -20,6 +20,7 @@ jobs:
   builder:
     needs: build-stratigy
     strategy:
+      max-parallel: 2
       matrix:
         dirs: ${{fromJson(needs.build-stratigy.outputs.matrix)}}
     runs-on: ubuntu-latest
