@@ -1,0 +1,87 @@
+name: Deploy multi-arch Docker images
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-stratigy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - id: set-matrix
+        run: |
+          sudo apt-get install jq
+          echo "::set-output name=matrix::$(bash prepare.sh)"
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
+  builder:
+    needs: build-stratigy
+    strategy:
+      matrix:
+        dirs: ${{fromJson(needs.build-stratigy.outputs.matrix)}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Init builder
+        id: pre-build
+        run: |
+          dir=${{ matrix.dirs }}
+          # dir=$(echo "$dir" | sed 's/\/*$//g')
+          echo ::set-output name=org_name::"techthinkerorg"
+          echo ::set-output name=image_name::"$dir"
+          echo ::set-output name=version::$(head -n1 "${dir}/.version")
+      - name: Prepare
+        id: prepare
+        run: |
+          DOCKER_IMAGE=${{steps.pre-build.outputs.org_name}}/${{steps.pre-build.outputs.image_name}}
+          DOCKER_PLATFORMS=linux/amd64,linux/arm/v7,linux/arm64,linux/386
+          VERSION=${{steps.pre-build.outputs.version}}
+          TAGS="--tag ${DOCKER_IMAGE}:${VERSION}"
+          if [ $VERSION = latest -o $VERSION = nightly ]; then
+            TAGS="$TAGS --tag ${DOCKER_IMAGE}:latest"
+          fi
+          echo ::set-output name=docker_image::${DOCKER_IMAGE}
+          echo ::set-output name=version::${VERSION}
+          echo ::set-output name=buildx_args::--file ${{steps.pre-build.outputs.image_name}}/Dockerfile \
+            --platform ${DOCKER_PLATFORMS} \
+            --build-arg VERSION=${VERSION} \
+            --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
+            --build-arg VCS_REF=${GITHUB_SHA::8} \
+            ${TAGS} .
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+        with:
+          platforms: all
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          version: latest
+      - name: Available platforms
+        run: echo ${{ steps.buildx.outputs.platforms }}
+      - name: Docker Buildx (build)
+        run: |
+          docker buildx build --no-cache --pull --output "type=image,push=false" ${{ steps.prepare.outputs.buildx_args }}
+      - name: Docker Login
+        if: success() && github.event_name != 'pull_request'
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USERNAME}" --password-stdin
+      - name: Docker Buildx (push)
+        if: success() && github.event_name != 'pull_request'
+        run: |
+          docker buildx build --output "type=image,push=true" ${{ steps.prepare.outputs.buildx_args }}
+      - name: Docker Check Manifest
+        if: always() && github.event_name != 'pull_request'
+        run: |
+          docker run --rm mplatform/mquery ${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.version }}
+      - name: Clear
+        if: always() && github.event_name != 'pull_request'
+        run: |
+          rm -f ${HOME}/.docker/config.json
