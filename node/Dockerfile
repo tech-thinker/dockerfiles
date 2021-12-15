@@ -1,2 +1,2 @@
-FROM nats:2.2.0
+FROM node:16.7.0
 LABEL maintainer="Tech Thinker <https://techthinker.js.org>"

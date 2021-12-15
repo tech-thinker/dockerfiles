@@ -35,11 +35,12 @@ jobs:
           echo ::set-output name=org_name::"techthinkerorg"
           echo ::set-output name=image_name::"$dir"
           echo ::set-output name=version::$(head -n1 "${dir}/.version")
+          echo ::set-output name=arch::$(head -n1 "${dir}/.arch")
       - name: Prepare
         id: prepare
         run: |
           DOCKER_IMAGE=${{steps.pre-build.outputs.org_name}}/${{steps.pre-build.outputs.image_name}}
-          DOCKER_PLATFORMS=linux/amd64,linux/arm/v7,linux/arm64,linux/386
+          DOCKER_PLATFORMS=${{steps.pre-build.outputs.arch}}
           VERSION=${{steps.pre-build.outputs.version}}
           TAGS="--tag ${DOCKER_IMAGE}:${VERSION}"
           if [ $VERSION = latest -o $VERSION = nightly ]; then
