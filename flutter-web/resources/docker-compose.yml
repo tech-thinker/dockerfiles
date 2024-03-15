@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  flutter:
+    container_name: flutter_web
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5080:5000"
+      - "57790:57790"
+    volumes:
+      - .:/app

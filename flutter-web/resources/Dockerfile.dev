@@ -1,0 +1,11 @@
+FROM techthinkerorg/flutter-web:3.19.3
+LABEL maintainer="Asif Mohammad Mollah"
+# As per your timezone
+ENV TZ=UTC+5:30
+
+RUN mkdir /app
+COPY ./entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+WORKDIR /app
+
+ENTRYPOINT ["/app/entrypoint.sh"]
