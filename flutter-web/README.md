@@ -13,14 +13,14 @@ cd example_project
 FROM techthinkerorg/flutter-web:3.19.3
 LABEL maintainer="Asif Mohammad Mollah"
 # As per your timezone
-ENV TZ=UTC
+ENV TZ=UTC+5:30
 
-RUN mkdir app
-WORKDIR /app
+RUN mkdir /app
 COPY ./entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
+WORKDIR /app
 
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["sh", "/app/entrypoint.sh"]
 ```
 3. Create `entrypoint.sh``
 ```sh

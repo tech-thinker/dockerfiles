@@ -4,8 +4,9 @@ LABEL maintainer="Asif Mohammad Mollah"
 ENV TZ=UTC+5:30
 
 RUN mkdir /app
+# WORKDIR /app
 COPY ./entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 WORKDIR /app
 
-ENTRYPOINT ["/app/entrypoint.sh"]
+ENTRYPOINT ["sh", "/app/entrypoint.sh"]
