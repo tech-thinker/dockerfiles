@@ -1,2 +1,2 @@
-FROM node:16.7.0
+FROM node:16.20
 LABEL maintainer="Tech Thinker <https://techthinker.js.org>"
