@@ -54,8 +54,10 @@ RUN apk add autoconf gcc g++ make libffi-dev openssl-dev
 RUN pecl install mongodb
 RUN echo "extension=mongodb.so" > /usr/local/etc/php/conf.d/docker-php-ext-mongodb.ini
 
-COPY entrypoint.sh /usr/local/bin/
-ENTRYPOINT ["entrypoint.sh", "docker-php-entrypoint"]
+COPY entrypoint.sh /usr/bin/
+# ENTRYPOINT ["entrypoint.sh", "docker-php-entrypoint"]
+
+RUN /usr/bin/entrypoint.sh
 
 USER adminer
 CMD	[ "php-fpm" ]
