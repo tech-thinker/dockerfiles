@@ -1,2 +1,2 @@
-FROM bitnami/postgresql:12
+FROM bitnami/postgresql:16
 LABEL maintainer="Tech Thinker <https://techthinker.js.org>"
