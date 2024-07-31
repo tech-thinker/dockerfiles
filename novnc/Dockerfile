@@ -25,7 +25,8 @@ ENV HOME=/root \
     DISPLAY_WIDTH=1024 \
     DISPLAY_HEIGHT=768 \
     RUN_XTERM=yes \
-    RUN_FLUXBOX=yes
+    RUN_FLUXBOX=yes \
+    LOGIN_REQUIRED=no
 
 RUN ln -s /usr/share/novnc/vnc.html /usr/share/novnc/index.html
 RUN mkdir -p /app
@@ -33,6 +34,7 @@ RUN mkdir -p /app/conf.d
 COPY ./conf.d/fluxbox.conf /app/conf.d/fluxbox.conf
 COPY ./conf.d/websockify.conf /app/conf.d/websockify.conf
 COPY ./conf.d/x11vnc.conf /app/conf.d/x11vnc.conf
+COPY ./conf.d/x11vnc-login.conf /app/conf.d/x11vnc-login.conf
 COPY ./conf.d/xvfb.conf /app/conf.d/xvfb.conf
 COPY ./supervisord.conf /app/supervisord.conf
 COPY ./bootstrap.sh /app/bootstrap.sh

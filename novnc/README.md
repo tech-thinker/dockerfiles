@@ -1,6 +1,11 @@
 # NoVNC
 Its a noVNC server that can allow you to share any gui docker or system app through it.
 
+# Version
+
+- v1.0.0 is no password required to login over vnc
+- v2.0.0 is required password to login, default password is "password"
+
 # Docker-Compose
 ```yml
 version: '2'
@@ -21,6 +26,10 @@ services:
       - DISPLAY_WIDTH=1280
       - DISPLAY_HEIGHT=720
       - RUN_XTERM=no
+      # Default password is "password"
+      # Default login required value is "no"
+      - LOGIN_REQUIRED=yes
+      - X11VNC_PASSWORD=password
     ports:
       - "6080:6080"
     networks:
