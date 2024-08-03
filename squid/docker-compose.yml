@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  squid:
+    build:
+      context: .
+    container_name: squid
+    ports:
+      - "3128:3128"
+    environment:
+      - AUTH_REQUIRED=true
+      - USERNAME=squid
+      - PASSWORD=Pass()123
+    volumes:
+      - data:/var/spool/squid
+volumes:
+  data:
