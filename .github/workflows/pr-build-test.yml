@@ -34,6 +34,7 @@ jobs:
           echo ::set-output name=image_name::"$dir"
           echo ::set-output name=version::$(head -n1 "${dir}/.version")
           echo ::set-output name=arch::$(head -n1 "${dir}/.arch")
+          echo ::set-output name=forced::$([ -f "${dir}/.forced" ] && echo 'true' || echo 'false')
       - name: Prepare
         id: prepare
         run: |
@@ -65,7 +66,7 @@ jobs:
           }
           if docker_tag_exists ${DOCKER_IMAGE} ${VERSION}; then
               echo "Docker image ${DOCKER_IMAGE}:${VERSION} already exists"
-              echo ::set-output name=build_needed::'false'
+              echo ::set-output name=build_needed::${{ steps.pre-build.outputs.forced }}
           else
               echo "Docker image ${DOCKER_IMAGE}:${VERSION} does not exist"
               echo ::set-output name=build_needed::'true'
