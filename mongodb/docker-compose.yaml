@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  mongodb:
+    container_name: mongodb
+    image: bitnami/mongodb:5.0.24
+    restart: always
+    volumes:
+      - mongo-data:/bitnami/mongodb
+    ports:
+      - 27018:27017
+volumes:
+  mongo-data:
+networks: {}
+
