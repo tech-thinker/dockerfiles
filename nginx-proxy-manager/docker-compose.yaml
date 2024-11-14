@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  nginx:
+    image: techthinkerorg/nginx-proxy-manager:2
+    network_mode: host
+    ports:
+      - 80:80
+      - 81:81
+      - 443:443
+    environment:
+      - DB_MYSQL_HOST=${DB_MYSQL_HOST}
+      - DB_MYSQL_PORT=${DB_MYSQL_PORT}
+      - DB_MYSQL_USER=${DB_MYSQL_USER}
+      - DB_MYSQL_PASSWORD=${DB_MYSQL_PASSWORD}
+      - DB_MYSQL_NAME=${DB_MYSQL_NAME}
+    volumes:
+      - nginx-data:/data
+      - letsencrypt-data:/etc/letsencrypt
+volumes:
+  nginx-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /srv/nginx-data
+      o: bind
+  letsencrypt-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /srv/letsencrypt-data
+      o: bind
+
