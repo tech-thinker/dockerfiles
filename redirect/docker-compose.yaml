@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+  redirect:
+    build:
+      context: .
+    environment:
+      - REDIRECT_URL=<your-redirect-url>
+    ports:
+      - 8099:3000
