@@ -1,0 +1,7 @@
+version: "3.8"
+services:
+  darna-mana-hai:
+    build:
+      context: .
+    ports:
+      - 8099:80
