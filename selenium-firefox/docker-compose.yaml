@@ -1,0 +1,10 @@
+version: '3'
+services:
+  selenium:
+    image: techthinkerorg/selenium-firefox:4.27.0
+    container_name: selenium
+    ports:
+      - "4444:4444"
+      - "5900:5900"
+    environment:
+      - SE_VNC_PASSWORD=secret
