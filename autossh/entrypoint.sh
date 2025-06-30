@@ -12,6 +12,8 @@ FORWARD_TYPE=${FORWARD_TYPE:-R} # R = remote forward, L = local forward
 
 SSH_KEY_PATH="/root/.ssh/id_rsa"
 KNOWN_HOSTS_PATH="/root/.ssh/known_hosts"
+AUTOSSH_GATETIME=0
+AUTOSSH_POLL=10
 
 # Create .ssh directory if it doesn't exist
 mkdir -p /root/.ssh
@@ -36,7 +38,8 @@ else
 fi
 
 # Common SSH options
-SSH_OPTS="-o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o IdentityFile=$SSH_KEY_PATH $STRICT_OPTS"
+EXTRA_OPTS="-o Compression=no -o TCPKeepAlive=yes"
+SSH_OPTS="$EXTRA_OPTS -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o IdentityFile=$SSH_KEY_PATH $STRICT_OPTS"
 
 # Build tunnel command
 if [ "$FORWARD_TYPE" = "R" ]; then
