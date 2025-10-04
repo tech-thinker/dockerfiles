@@ -1,2 +1,2 @@
-FROM ghcr.io/immich-app/immich-server:v1.138.1
+FROM n8nio/n8n:1.114.2
 LABEL maintainer="Tech Thinker <https://techthinker.js.org>"
