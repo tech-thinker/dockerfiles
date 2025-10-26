@@ -6,8 +6,13 @@ RUN apk update && \
 
 RUN ssh-keygen -A
 
-ADD entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-ADD sshd_config.conf /sshd_config.conf
+RUN mkdir -p /tools
 
-ENTRYPOINT ["/entrypoint.sh"]
+ADD entrypoint.sh /tools/entrypoint.sh
+ADD sftp-create-user.sh /tools/sftp-create-user.sh
+RUN chmod +x /tools/entrypoint.sh
+RUN chmod +x /tools/sftp-create-user.sh
+ADD sshd_config.conf /tools/sshd_config.conf
+ADD default.conf /tools/default.conf
+
+ENTRYPOINT ["/tools/entrypoint.sh"]

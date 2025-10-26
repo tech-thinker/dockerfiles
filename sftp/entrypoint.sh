@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+# Installing commands
+cp /tools/sftp-create-user.sh /usr/local/bin/sftp-create-user
+
 # Required env vars
 SFTP_USER=${SFTP_USER:?Please set SFTP_USER}
 SFTP_PASSWORD=${SFTP_PASSWORD:?Please set SFTP_PASSWORD}
@@ -8,8 +11,12 @@ SFTP_DIR=${DIR:-upload}
 SFTP_HOME="/home/$SFTP_USER"
 SFTP_PATH="/home/$SFTP_USER/$SFTP_DIR"
 
+export SFTP_USER SFTP_HOME SFTP_PATH
+
 # Replace variables in sshd_config
-envsubst < /sshd_config.conf > /etc/ssh/sshd_config
+envsubst < /tools/sshd_config.conf > /etc/ssh/sshd_config
+mkdir -p /etc/ssh/sshd_config.d
+envsubst < /tools/default.conf > /etc/ssh/sshd_config.d/$SFTP_USER.conf
 
 # Create user if not exists
 if ! id "$SFTP_USER" &>/dev/null; then
