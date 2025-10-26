@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  sftp:
+    build: .
+    container_name: sftp
+    restart: always
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    ports:
+      - "22000:22"
+    volumes:
+      - ./upload:/home/myuser/upload
+    environment:
+      SFTP_USER: "myuser"
+      SFTP_PASSWORD: "mypassword"
+      SFTP_DIR: "upload"
