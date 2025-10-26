@@ -15,19 +15,24 @@ This project sets up a secure SFTP server using Docker Compose. It utilizes the 
     version: "3.8"
     services:
       sftp:
-        image: techthinkerorg/sftp
+        image: techthinkerorg/sftp:v1.0.0
         container_name: sftp
         restart: always
-        extra_hosts:
-          - host.docker.internal:host-gateway
         ports:
-          - "22000:22"
+          - 22000:22
         volumes:
-          - ./upload:/home/myuser/upload
+          - sftp-data:/home/myuser/upload
         environment:
-          SFTP_USER: "myuser"
-          SFTP_PASSWORD: "mypassword"
-          SFTP_DIR: "upload"
+          SFTP_USER: myuser
+          SFTP_PASSWORD: mypassword
+          SFTP_DIR: upload
+    volumes:
+      sftp-data:
+        driver: local
+        driver_opts:
+          type: none
+          device: /srv/sftp-data
+          o: bind
 
     ```
 
