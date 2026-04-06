@@ -1,7 +1,7 @@
 services:
   telepath:
     container_name: telepath
-    image: ghcr.io/tech-thinker/telepath:latest
+    image: techthinkerorg/telepath:v2.0.0
     networks:
       - telepath
     volumes:
