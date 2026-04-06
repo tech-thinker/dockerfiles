@@ -1,0 +1,11 @@
+services:
+  telepath:
+    container_name: telepath
+    image: ghcr.io/tech-thinker/telepath:latest
+    networks:
+      - telepath
+    volumes:
+      - ./myconfig:/etc/telepath
+
+networks:
+  telepath:
