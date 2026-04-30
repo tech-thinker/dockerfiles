@@ -1,0 +1,26 @@
+services:
+  jupyter:
+    container_name: jupyter
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    networks:
+      - jupyter-net
+    ports:
+      - "8888:3000"
+    volumes:
+      - ./labs:/app
+      - ./works:/app/works
+    environment:
+      JUPYTER_PASSWORD: "Pass@1234"
+
+  telepath:
+    container_name: telepath
+    image: ghcr.io/tech-thinker/telepath:v2.0.0
+    networks:
+      - jupyter-net
+    volumes:
+      - ./ssh:/etc/telepath
+
+networks:
+  jupyter-net:
