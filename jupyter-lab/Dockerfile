@@ -15,7 +15,8 @@ RUN pip install --no-cache-dir \
     fpdf \
     weasyprint \
     mitosheet \
-    duckdb
+    duckdb \
+    gradio
 
 # Your custom dependencies end here...
 
