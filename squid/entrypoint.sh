@@ -29,6 +29,23 @@ else
     htpasswd -bc /etc/squid/htpasswd ${USERNAME} ${PASSWORD}
 fi
 
+SSL_VERIFY=${SSL_VERIFY:-true}
+case "$SSL_VERIFY" in
+    true)
+        ;;
+    false)
+        if ! grep -q '^# sslproxy_flags DONT_VERIFY_PEER$' /etc/squid/squid.conf; then
+            echo "SSL_VERIFY=false was set, but the Squid config has no SSL verification setting to disable." >&2
+            exit 1
+        fi
+        sed -i 's/^# sslproxy_flags DONT_VERIFY_PEER$/sslproxy_flags DONT_VERIFY_PEER/' /etc/squid/squid.conf
+        ;;
+    *)
+        echo "SSL_VERIFY must be 'true' or 'false' (got '$SSL_VERIFY')." >&2
+        exit 1
+        ;;
+esac
+
 # re-create snakeoil self-signed certificate removed in the build process
 if [ ! -f /etc/ssl/private/ssl-cert-snakeoil.key ]; then
     /usr/sbin/make-ssl-cert generate-default-snakeoil --force-overwrite > /dev/null 2>&1

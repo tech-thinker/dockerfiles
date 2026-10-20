@@ -11,6 +11,7 @@ services:
       - AUTH_REQUIRED=true
       - USERNAME=squid
       - PASSWORD=Pass()123
+      - SSL_VERIFY=false
     volumes:
       - data:/var/spool/squid
 volumes:
