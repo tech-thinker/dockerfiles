@@ -1,0 +1,23 @@
+server {
+    listen 0.0.0.0:9210;
+    server_name _;
+
+    location / {
+        proxy_pass http://127.0.0.1:9010;
+
+        # Basic proxy headers
+        proxy_set_header Host 127.0.0.1:9010;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # WebSocket support (Crucial for CDP / Playwright / DevTools)
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+
+        # Prevent timeouts during long-lived browser sessions
+        proxy_read_timeout 86400s;
+        proxy_send_timeout 86400s;
+    }
+}

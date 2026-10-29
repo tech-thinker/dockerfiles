@@ -1,0 +1,14 @@
+services:
+  browserclaw:
+    build: .
+    container_name: browserclaw
+    restart: always
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    ports:
+      - 9210:9210
+      - 5901:5901
+    environment:
+      VNC_PASSWORD: pass1234
+      VNC_RESOLUTION: 1280x800
+      VNC_DEPTH: 24
