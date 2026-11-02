@@ -1,7 +1,7 @@
 FROM debian:trixie-slim
 
-ARG BASE_VERSION=0.52.0
-ARG VERSION=0.52.1.1
+ENV BASE_VERSION=0.52.0
+ENV VERSION=0.52.1.1
 
 LABEL maintainer="Tech Thinker <https://techthinker.js.org>"
 
