@@ -50,6 +50,7 @@ RUN set -eux; \
         *) echo "Unsupported architecture: ${TARGETARCH}"; exit 1 ;; \
     esac; \
     DOWNLOAD_URL="https://github.com/browseros-ai/BrowserOS/releases/download/browserclaw%2Fv${BASE_VERSION}/BrowserOS_neo_v${VERSION}_${ARCH}.deb"; \
+    echo "Downloading BrowserOS for ${ARCH}: ${DOWNLOAD_URL}"; \
     curl -fL "${DOWNLOAD_URL}" -o /tmp/browser.deb; \
     apt-get update; \
     apt-get install -y /tmp/browser.deb; \
