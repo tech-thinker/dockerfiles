@@ -1,8 +1,5 @@
 FROM debian:trixie-slim
 
-ENV BASE_VERSION=0.52.0
-ENV VERSION=0.52.1.1
-
 LABEL maintainer="Tech Thinker <https://techthinker.js.org>"
 
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -43,19 +40,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Download and install BrowserOS, allowing APT to resolve package dependencies.
-RUN set -eux; \
-    case "${TARGETARCH}" in \
-        amd64) ARCH="amd64" ;; \
-        arm64) ARCH="arm64" ;; \
-        *) echo "Unsupported architecture: ${TARGETARCH}"; exit 1 ;; \
-    esac; \
-    DOWNLOAD_URL="https://github.com/browseros-ai/BrowserOS/releases/download/browserclaw%2Fv${BASE_VERSION}/BrowserOS_neo_v${VERSION}_${ARCH}.deb"; \
-    echo "Downloading BrowserOS for ${ARCH}: ${DOWNLOAD_URL}"; \
-    curl -fL "${DOWNLOAD_URL}" -o /tmp/browser.deb; \
-    apt-get update; \
-    apt-get install -y /tmp/browser.deb; \
-    rm -f /tmp/browser.deb; \
-    rm -rf /var/lib/apt/lists/*
+RUN curl -fL https://cdn.browseros.com/download/BrowserOS_neo.deb \
+        -o /tmp/browser.deb \
+    && apt-get update \
+    && apt-get install -y /tmp/browser.deb \
+    && rm -f /tmp/browser.deb \
+    && rm -rf /var/lib/apt/lists/*
 
 # Create the desktop user.
 RUN useradd -m -s /bin/bash desktop \
