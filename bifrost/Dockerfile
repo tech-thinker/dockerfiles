@@ -1,2 +1,2 @@
-FROM maximhq/bifrost:v2.4.0
+FROM maximhq/bifrost:v2.5.0
 LABEL maintainer="Tech Thinker <https://techthinker.js.org>"
